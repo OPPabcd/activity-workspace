@@ -1,4 +1,6 @@
 FROM node:20-alpine AS builder
+# Install OpenSSL 3 just in case, though Node 20 alpine ships it
+RUN apk add --no-cache openssl
 WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
@@ -9,6 +11,8 @@ RUN mkdir -p public
 RUN npm run build
 
 FROM node:20-alpine AS runner
+# Install OpenSSL 3
+RUN apk add --no-cache openssl
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
