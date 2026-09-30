@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+.env
+.vscode
+uploads
+storage_mounts
+test-core.mjs
