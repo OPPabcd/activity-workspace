@@ -3,7 +3,7 @@ import { signToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   const { password } = await req.json();
-  const adminPassword = process.env.ADMIN_PASSWORD || "changeme";
+  const adminPassword = (process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.trim()) || "changeme";
 
   if (password !== adminPassword) {
     return NextResponse.json({ error: "Password salah" }, { status: 401 });
@@ -14,8 +14,8 @@ export async function POST(req: Request) {
 
   res.cookies.set("session", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: process.env.COOKIE_SECURE === "true",
+    sameSite: "lax",
     maxAge: 315360000, // 10 tahun
     path: "/",
   });
